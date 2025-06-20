@@ -1,11 +1,22 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import AnimatedCard from '../components/AnimatedCard';
 import { REFERRAL_BONUS } from '../constants';
+import { getUsers } from '../utils/localStorage'; // Import getUsers
+import { User } from '../types'; // Import User type
 
 const ReferralPage: React.FC = () => {
   const { currentUser } = useAuth();
+  const [referredUsers, setReferredUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    if (currentUser) {
+      const allUsers = getUsers();
+      const myReferrals = allUsers.filter(user => user.referredBy === currentUser.referralCode);
+      setReferredUsers(myReferrals);
+    }
+  }, [currentUser]);
 
   if (!currentUser) return null;
 
@@ -54,9 +65,28 @@ const ReferralPage: React.FC = () => {
           <li>Help grow the Ranger AI community and earn together!</li>
         </ul>
       </AnimatedCard>
+
+      <AnimatedCard title="Users You've Referred">
+        {referredUsers.length > 0 ? (
+          <div className="space-y-3">
+            <p className="text-slate-300">You have successfully referred the following users:</p>
+            <ul className="list-disc list-inside text-sky-300 pl-4">
+              {referredUsers.map(user => (
+                <li key={user.id} className="py-1">
+                  <span className="font-semibold">{user.username}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-slate-400 mt-2">Total referrals: {referredUsers.length}</p>
+          </div>
+        ) : (
+          <p className="text-slate-400 text-center py-4">
+            You haven't referred anyone yet. Share your code to start earning rewards!
+          </p>
+        )}
+      </AnimatedCard>
     </div>
   );
 };
 
 export default ReferralPage;
-    

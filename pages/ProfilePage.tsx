@@ -22,6 +22,10 @@ const ProfilePage: React.FC = () => {
             <p className="text-sm text-sky-300">Username</p>
             <p className="text-xl font-semibold">{currentUser.username}</p>
           </div>
+           <div>
+            <p className="text-sm text-sky-300">Email</p>
+            <p className="text-xl font-semibold">{currentUser.email}</p>
+          </div>
           <div>
             <p className="text-sm text-sky-300">Your Unique Referral Code</p>
             <div className="flex items-center space-x-2 mt-1">
@@ -55,4 +59,3 @@ const ProfilePage: React.FC = () => {
 };
 
 export default ProfilePage;
-    

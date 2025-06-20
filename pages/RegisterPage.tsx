@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
@@ -5,6 +6,7 @@ import { APP_NAME } from '../constants';
 
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState(''); // Added email state
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
@@ -18,8 +20,14 @@ const RegisterPage: React.FC = () => {
     setError('');
     setLoading(true);
 
-    if (!username || !password || !confirmPassword) {
-      setError('All fields except referral code are required.');
+    if (!username || !email || !password || !confirmPassword) { // Added email check
+      setError('Username, email, password, and confirm password are required.');
+      setLoading(false);
+      return;
+    }
+    // Basic email format validation (optional, browser handles type="email")
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError('Please enter a valid email address.');
       setLoading(false);
       return;
     }
@@ -34,7 +42,7 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
-    const success = await register(username, password, referralCode);
+    const success = await register(username, email, password, referralCode); // Pass email to register
     setLoading(false);
     if (success) {
       navigate('/dashboard');
@@ -45,7 +53,7 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center" style={{backgroundImage: "url('https://picsum.photos/seed/registerbg/1920/1080')"}}>
-      <div className="glassmorphism p-8 md:p-12 rounded-xl shadow-2xl w-full max-w-md space-y-6 animate-fadeInUpScale">
+      <div className="glassmorphism p-8 md:p-12 rounded-xl shadow-2xl w-full max-w-md space-y-4 animate-fadeInUpScale">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-sky-400 font-orbitron hover:text-sky-300 transition-colors duration-300 cursor-default">Join {APP_NAME}</h1>
           <p className="mt-2 text-sky-100">Start your mining journey today!</p>
@@ -57,6 +65,13 @@ const RegisterPage: React.FC = () => {
             <input id="username" type="text" required value={username} onChange={(e) => setUsername(e.target.value)} 
             className="mt-1 block w-full px-3 py-2 bg-slate-700 bg-opacity-50 border border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 sm:text-sm text-white transition-all"
             placeholder="Choose a Username"/>
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-sky-200">Email Address</label>
+            <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} 
+            className="mt-1 block w-full px-3 py-2 bg-slate-700 bg-opacity-50 border border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 sm:text-sm text-white transition-all"
+            placeholder="Your Email Address"/>
           </div>
 
           <div>

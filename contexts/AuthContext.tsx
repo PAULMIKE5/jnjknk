@@ -86,17 +86,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
-  const register = async (username: string, passwordAttempt: string, referredByCode?: string): Promise<boolean> => {
+  const register = async (username: string, email: string, passwordAttempt: string, referredByCode?: string): Promise<boolean> => {
     let users = getUsers();
     if (users.find(u => u.username === username)) {
       alert("Username already exists.");
       return false;
     }
+    // Optional: Add email uniqueness check
+    // if (users.find(u => u.email === email)) {
+    //   alert("Email already registered.");
+    //   return false;
+    // }
 
     const passwordHash = await simpleHash(passwordAttempt);
     const newUser: User = {
       id: crypto.randomUUID(),
       username,
+      email, // Store email
       passwordHash,
       referralCode: generateReferralCode(),
       referredBy: referredByCode,
@@ -140,4 +146,3 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </AuthContext.Provider>
   );
 };
-    

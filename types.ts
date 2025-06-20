@@ -8,6 +8,7 @@ export interface UserBalances {
 export interface User {
   id: string;
   username: string;
+  email: string; // Added email field
   passwordHash: string; 
   referralCode: string; 
   referredBy?: string; 
@@ -22,7 +23,7 @@ export interface AuthContextType {
   currentUser: User | null;
   loadingAuth: boolean;
   login: (username: string, passwordHash: string) => Promise<boolean>;
-  register: (username: string, passwordHash: string, referredByCode?: string) => Promise<boolean>;
+  register: (username: string, email: string, passwordHash: string, referredByCode?: string) => Promise<boolean>; // Added email parameter
   logout: () => void;
   updateUser: (updatedUser: User) => void; 
 }
@@ -31,4 +32,3 @@ export enum SwapCurrency {
   USDT = 'USDT',
   BNB = 'BNB',
 }
-    
