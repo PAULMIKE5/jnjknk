@@ -1,0 +1,5 @@
+{
+  "name": "Ranger AI Mining",
+  "description": "A web application for simulated Ranger AI token mining, with features like referrals, token swapping, and ad rewards.",
+  "requestFramePermissions": []
+}
